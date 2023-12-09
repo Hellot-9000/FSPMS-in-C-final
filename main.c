@@ -12,7 +12,7 @@ struct Account {
     char username[MAX_STRING_LENGTH];
     char password[MAX_STRING_LENGTH];
 };
-
+//structures the reservation for the program,
 struct Reservation {
     int reservationNumber;
     char guestName[MAX_STRING_LENGTH];
@@ -22,7 +22,7 @@ struct Reservation {
     char status[MAX_STRING_LENGTH];
 
 };
-
+//I misspelled reservation and instead of changing all the parts that are misspelled, I created a typedef
 typedef struct {
     int reservationNumber;
     char guestName[MAX_STRING_LENGTH];
@@ -31,6 +31,7 @@ typedef struct {
     int roomNumber;
     char status[MAX_STRING_LENGTH];
 } Reservation;
+//modularized the program for not only easy reading, but for easy programming. 
 void displayReservationsFromFile();
 void readReservationFromFile(FILE *file, Reservation *reservation);
 void printReservation(const Reservation *reservation);
@@ -49,10 +50,12 @@ void ownersReceivableMenu();
 void MassCheckout();
 void backOfHouseMenu(struct Account accounts[], int *numAccounts);
 void logoff(int *loggedInUser);
+//provides the logoff function. Logging in sets the *loggedInUser to 1, but logoff sets it to 0
 void logoff(int *loggedInUser) {
     *loggedInUser = 0;
     printf("Logged off successfully.\n");
 }
+//This basically just says that all guests that are going out are checked out. (Makes it alot easier than one by one for a reservation)
 void MassCheckout() {
     printf("Check out all guests going out today? (1,2)");
     int choice;
@@ -69,7 +72,7 @@ void MassCheckout() {
         printf("Invalid option. Please enter 1 or 2.\n");
     }
 }
-
+//the main menu that you see
 void frontOfficeMenu(struct Reservation reservations[], int *numReservations) {
     int subMenuChoice;
 
@@ -99,18 +102,18 @@ void frontOfficeMenu(struct Reservation reservations[], int *numReservations) {
         }
     }
 }
-
+//this reads the Reservations.txt file
 void displayReservationsFromFile() {
     FILE *file = fopen("reservations.txt", "r");
-    if (!file) {
+    if (!file) { /*error handling */
         perror("Error opening reservations.txt for reading");
         return;
     }
 
 
     printf("\nDisplaying all reservations, please wait...\n");
-
-    Reservation reservation;
+/*this basically scans each line of the txt file and organizes it to be more readable*/
+    Reservation reservation; 
     while (fscanf(file, "%d %s %s %s %d %s",
                   &reservation.reservationNumber,
                   reservation.guestName,
@@ -123,7 +126,7 @@ void displayReservationsFromFile() {
 
     fclose(file);
 }
-
+//not sure why this works, but when there is redundency, it works but when this code below isnt here it doesnt work... IDk why
 void readReservationFromFile(FILE *file, Reservation *reservation) {
     fscanf(file, "%d %s %s %s %d %s",
            &reservation->reservationNumber,
@@ -143,6 +146,7 @@ void printReservation(const Reservation *reservation) {
            reservation->roomNumber,
            reservation->status);
 }
+
 void loadReservationsFromFile(struct Reservation *reservations, int *numReservations) {
     FILE *file = fopen("Reservations.txt", "r");
     if (file == NULL) {
